@@ -1,0 +1,10 @@
+Copy these six original PNG files into this folder without renaming them:
+
+1. graphic design.png
+2. Motion Graphics.png
+3. 3d.png
+4. AI Visuals.png
+5. Video Editing.png
+6. Brand Identity.png
+
+The HTML already points to these exact filenames.

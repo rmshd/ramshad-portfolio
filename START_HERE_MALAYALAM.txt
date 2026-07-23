@@ -1,0 +1,32 @@
+RAMSHAD PORTFOLIO - ആദ്യം ചെയ്യേണ്ടത്
+
+1. ഈ 8 files incoming-media folder-ൽ ഇടുക:
+   ramshad portfolio.png
+   profile.png
+   graphic design.png
+   Motion Graphics.png
+   3d.png
+   AI Visuals.png
+   Video Editing.png
+   Brand Identity.png
+
+2. PowerShell-ൽ project folder തുറന്ന് run ചെയ്യുക:
+   powershell -ExecutionPolicy Bypass -File .\organize-media.ps1
+
+3. supabase/setup.sql Supabase SQL Editor-ൽ run ചെയ്യുക.
+
+4. Vercel Environment Variables ചേർക്കുക:
+   SUPABASE_URL
+   SUPABASE_ANON_KEY
+   SUPABASE_SERVICE_ROLE_KEY
+   SUPABASE_STORAGE_BUCKET = portfolio-media
+   ADMIN_KEY
+
+5. ഇതേ current Vercel project-ന്റെ GitHub repository-ലേക്ക് files push ചെയ്യുക.
+
+6. Deploy കഴിഞ്ഞ് /admin തുറന്ന് Works images/videos upload ചെയ്യുക.
+
+ശ്രദ്ധിക്കുക:
+- Service icon filenames മാറ്റിയിട്ടില്ല.
+- Works files public folder-ൽ ഇടേണ്ടതില്ല.
+- Works Supabase backend-ലാണ് save ആകുന്നത്.

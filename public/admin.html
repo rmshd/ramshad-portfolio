@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Portfolio Admin</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0a0c0a;--card:#131813;--line:#263026;--text:#eef4ee;--muted:#869586;--green:#39e75f;--blue:#1e90ff;--orange:#ff6b1a}
+    *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--text)}
+    main{width:min(1100px,92%);margin:40px auto}.top{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+    a{color:var(--green)}.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:20px}
+    h1,h2{margin:0 0 14px}label{display:grid;gap:6px;color:var(--muted);font-size:13px}input,select,button{font:inherit}
+    input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;background:#0d110d;color:var(--text)}
+    button{border:0;border-radius:8px;padding:11px 15px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--green),var(--blue));color:#001000}
+    button.danger{background:#341511;color:#ff9a8b;border:1px solid #6e2a22}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.actions{display:flex;gap:8px;align-items:end}
+    .item{display:grid;grid-template-columns:90px 1fr auto;gap:14px;align-items:center;border-top:1px solid var(--line);padding:12px 0}.item:first-child{border-top:0}.thumb{width:90px;height:62px;object-fit:cover;background:#080a08;border-radius:7px}.muted{color:var(--muted);font-size:13px}.status{min-height:24px;color:var(--green)}
+    @media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.item{grid-template-columns:70px 1fr}.item button{grid-column:2}.thumb{width:70px}}
+    @media(max-width:520px){.grid{grid-template-columns:1fr}}
+  </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body><main>
+  <div class="top"><div><h1>Portfolio Admin</h1><div class="muted">Upload projects and review enquiries.</div></div><a href="/">Open website</a></div>
+  <section class="panel"><h2>Admin access</h2><div class="grid"><label style="grid-column:span 3">Admin key<input id="key" type="password" placeholder="Same value as ADMIN_KEY in Vercel"></label><div class="actions"><button id="connect">Connect</button></div></div><div id="status" class="status"></div></section>
+  <section class="panel"><h2>Add portfolio project</h2><form id="uploadForm" class="grid"><label>Title<input name="title" required></label><label>Category<input name="category" required></label><label>Accent<select name="accent"><option value="g">Green</option><option value="b">Blue</option><option value="o">Orange</option></select></label><label>Image / Video<input name="media" type="file" accept="image/*,video/*" required></label><div class="actions"><button type="submit">Upload project</button></div></form></section>
+  <section class="panel"><h2>Portfolio items</h2><div id="portfolio"></div></section>
+  <section class="panel"><h2>Enquiries</h2><div id="messages"></div></section>
+</main><script>
+const keyInput=document.getElementById('key'),statusBox=document.getElementById('status');
+keyInput.value=sessionStorage.getItem('portfolioAdminKey')||'';
+const headers=()=>({'x-admin-key':keyInput.value});
+function status(text,bad=false){statusBox.textContent=text;statusBox.style.color=bad?'#ff9a8b':'var(--green)'}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function api(url,options={}){options.headers={...headers(),...(options.headers||{})};const r=await fetch(url,options);const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data.error||'Request failed');return data}
+async function load(){sessionStorage.setItem('portfolioAdminKey',keyInput.value);status('Connected.');const [items,messages]=await Promise.all([fetch('/api/portfolio').then(async r=>{const d=await r.json();if(!r.ok)throw new Error(d.error||'Portfolio load failed');return d}),api('/api/admin/messages')]);renderPortfolio(items);renderMessages(messages)}
+function renderPortfolio(items){const box=document.getElementById('portfolio');box.innerHTML=items.map(i=>`<div class="item">${i.type==='video'?`<video class="thumb" src="${esc(i.src)}" muted></video>`:`<img class="thumb" src="${esc(i.src)}" alt="">`}<div><strong>${esc(i.title)}</strong><div class="muted">${esc(i.category)} · ${esc(i.type)}</div></div><button class="danger" data-delete-project="${esc(i.id)}">Delete</button></div>`).join('')||'<div class="muted">No projects.</div>'}
+function renderMessages(items){const box=document.getElementById('messages');box.innerHTML=items.map(i=>`<div class="item"><div></div><div><strong>${esc(i.name)} — ${esc(i.service)}</strong><div class="muted">${esc(i.contact||'No contact')} · ${new Date(i.createdAt).toLocaleString()}</div><p>${esc(i.message)}</p></div><button class="danger" data-delete-message="${esc(i.id)}">Delete</button></div>`).join('')||'<div class="muted">No enquiries.</div>'}
+document.getElementById('connect').onclick=()=>load().catch(e=>status(e.message,true));
+document.getElementById('uploadForm').onsubmit=async e=>{
+  e.preventDefault();
+  const form=e.currentTarget;
+  const file=form.elements.media.files[0];
+  if(!file)return status('Choose an image or video.',true);
+  try{
+    status('Preparing secure upload…');
+    const tokenData=await api('/api/admin/upload-token',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({fileName:file.name,mimeType:file.type,fileSize:file.size})
+    });
+    status(`Uploading ${file.name} directly to Supabase…`);
+    const client=window.supabase.createClient(tokenData.supabaseUrl,tokenData.supabaseAnonKey);
+    const {error:uploadError}=await client.storage.from(tokenData.bucket).uploadToSignedUrl(
+      tokenData.path,
+      tokenData.token,
+      file,
+      {contentType:file.type,cacheControl:'3600'}
+    );
+    if(uploadError)throw uploadError;
+    status('Saving project details…');
+    await api('/api/admin/complete-upload',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        title:form.elements.title.value,
+        category:form.elements.category.value,
+        accent:form.elements.accent.value,
+        type:file.type.startsWith('video/')?'video':'image',
+        storagePath:tokenData.path
+      })
+    });
+    form.reset();
+    await load();
+    status('Project uploaded successfully.');
+  }catch(err){status(err.message||'Upload failed.',true)}
+};
+document.addEventListener('click',async e=>{
+  const project=e.target.dataset.deleteProject,message=e.target.dataset.deleteMessage;
+  if(!project&&!message)return;
+  if(!confirm('Delete this item?'))return;
+  try{
+    const url=project?`/api/admin/delete-portfolio?id=${encodeURIComponent(project)}`:`/api/admin/delete-message?id=${encodeURIComponent(message)}`;
+    await api(url,{method:'DELETE'});
+    await load();
+    status('Deleted.');
+  }catch(err){status(err.message,true)}
+});
+if(keyInput.value)load().catch(e=>status(e.message,true));
+</script></body></html>

@@ -7,7 +7,11 @@ module.exports = async function handler(req, res) {
     const supabase = getSupabaseAdmin();
     const { data, error } = await supabase
       .from('portfolio_items')
-      .select('id,title,category,type,accent,src,storage_path,created_at')
+      .select('id,title,category,type,accent,src,storage_path,description,project_date,external_url,thumbnail_url,thumbnail_storage_path,featured,visible,status,sort_order,created_at,updated_at')
+      .eq('visible', true)
+      .eq('status', 'published')
+      .order('featured', { ascending: false })
+      .order('sort_order', { ascending: true })
       .order('created_at', { ascending: false });
     if (error) throw error;
     const items = (data || []).map(item => ({
@@ -18,7 +22,17 @@ module.exports = async function handler(req, res) {
       accent: item.accent,
       src: item.src,
       storagePath: item.storage_path,
-      createdAt: item.created_at
+      description: item.description,
+      projectDate: item.project_date,
+      externalUrl: item.external_url,
+      thumbnailUrl: item.thumbnail_url,
+      thumbnailStoragePath: item.thumbnail_storage_path,
+      featured: item.featured,
+      visible: item.visible,
+      status: item.status,
+      sortOrder: item.sort_order,
+      createdAt: item.created_at,
+      updatedAt: item.updated_at
     }));
     return sendJson(res, 200, items);
   } catch (error) {

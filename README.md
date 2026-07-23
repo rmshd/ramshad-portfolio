@@ -1,146 +1,64 @@
-# Ramshad Portfolio — Complete Vercel + Supabase Package
+# Ramshad Portfolio — Pro Admin v3
 
-Production site: `https://ramshad-portfolio.vercel.app/`
+A complete Vercel + Supabase portfolio CMS. The public design remains the same, while all important content can now be managed from `/admin` without editing HTML.
 
-This package contains the full frontend HTML, admin HTML, Vercel API functions, Supabase SQL, organized static-media folders and deployment instructions.
+## Main admin modules
 
-## Important media rule
+1. **Projects** — image/video upload, title, description, category dropdown, date, external link, featured, draft/published, show/hide, edit, delete and ordering.
+2. **Skills & Tools** — edit percentage, description, icon, card size and skill chips; add/remove tools such as Unreal Engine or DaVinci Resolve.
+3. **Life Journey** — add, edit, hide, delete and reorder milestones.
+4. **Services** — add/edit services, descriptions, icon images, visibility and order.
+5. **Hero & About** — profile picture, hero roles, bio, experience cards, statistics and footer.
+6. **Contact & Socials** — WhatsApp, email, contact text and social links.
+7. **Enquiries** — database inbox with New / Read / Replied status, search, filters and reply shortcuts.
+8. **Dashboard** — project, message and content counts with quick actions.
 
-- Logo, profile photo and the six service icons are static files inside `public/assets/images/`.
-- Portfolio/Works posters and videos are **not** stored inside the Vercel project.
-- Portfolio/Works are uploaded from `/admin` and stored permanently in Supabase Storage.
+## Important upgrade rule
 
-## Complete folder structure
+Your existing logo, profile image and six service icons are already in your current GitHub repository. This ZIP does not contain those original image bytes.
 
-```text
-ramshad-portfolio-vercel-complete/
-├── api/
-│   ├── _lib/
-│   ├── admin/
-│   ├── contact.js
-│   ├── health.js
-│   └── portfolio.js
-├── public/
-│   ├── index.html
-│   ├── admin.html
-│   └── assets/
-│       └── images/
-│           ├── branding/
-│           │   └── ramshad-portfolio.png       ← add original file
-│           ├── profile/
-│           │   └── profile.png                 ← add original file
-│           └── services/
-│               ├── graphic design.png          ← exact original name
-│               ├── Motion Graphics.png         ← exact original name
-│               ├── 3d.png                      ← exact original name
-│               ├── AI Visuals.png              ← exact original name
-│               ├── Video Editing.png           ← exact original name
-│               └── Brand Identity.png           ← exact original name
-├── supabase/
-│   └── setup.sql
-├── incoming-media/
-├── scripts/
-│   └── check.js
-├── .env.example
-├── .gitignore
-├── MEDIA_MAP.md
-├── organize-media.ps1
-├── package.json
-├── README.md
-├── VERCEL_DEPLOY_CHECKLIST.md
-└── vercel.json
-```
+**Do not empty/delete your current repository before this upgrade.** Copy the files from this package over the existing repository and choose **Replace/Merge**. Existing image files inside `public/assets/images/` will remain.
 
-The uploaded file contained only HTML, so the real PNG media files are not embedded in this ZIP. Copy your original files into `incoming-media/` and run the organizer, or place them manually in the paths above.
+Required static service filenames remain exactly:
 
-## 1. Organize the static media on Windows
+- `graphic design.png`
+- `Motion Graphics.png`
+- `3d.png`
+- `AI Visuals.png`
+- `Video Editing.png`
+- `Brand Identity.png`
 
-Put these files inside `incoming-media/`:
+## First required action
 
-```text
-ramshad portfolio.png
-profile.png
-graphic design.png
-Motion Graphics.png
-3d.png
-AI Visuals.png
-Video Editing.png
-Brand Identity.png
-```
+Run the updated `supabase/setup.sql` in Supabase SQL Editor. It safely upgrades the old database and seeds current site content. Then copy the new project files over the existing repository, commit and push.
 
-Run from PowerShell:
+Read `UPGRADE_FROM_CURRENT_SITE.md` for the exact order.
+
+## Existing Vercel variables
+
+No new Vercel environment variable is required. Keep:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_STORAGE_BUCKET=portfolio-media`
+- `ADMIN_KEY`
+
+## URLs after deployment
+
+- Website: `/`
+- Pro Admin: `/admin`
+- Health API: `/api/health`
+- Public content API: `/api/content`
+- Public projects API: `/api/portfolio`
+
+## Local validation
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\organize-media.ps1
-```
-
-The six service icon names are not changed.
-
-## 2. Create the Supabase backend
-
-1. Open your Supabase project.
-2. Go to **SQL Editor**.
-3. Copy and run all of `supabase/setup.sql`.
-4. Copy the Project URL, anon key and service-role key from Supabase project settings.
-
-The SQL creates:
-
-- `portfolio_items`
-- `portfolio_messages`
-- public Storage bucket `portfolio-media`
-
-The portfolio starts empty. Upload works later from `/admin`.
-
-## 3. Add Vercel environment variables
-
-In the existing Vercel project, open **Settings → Environment Variables** and add:
-
-```text
-SUPABASE_URL
-SUPABASE_ANON_KEY
-SUPABASE_SERVICE_ROLE_KEY
-SUPABASE_STORAGE_BUCKET=portfolio-media
-ADMIN_KEY
-```
-
-Never put `SUPABASE_SERVICE_ROLE_KEY` or `ADMIN_KEY` inside HTML or GitHub.
-
-## 4. Deploy to the same Vercel project
-
-Replace the contents of the GitHub repository already connected to the current Vercel project, then commit and push.
-
-Recommended Vercel settings:
-
-- Framework Preset: `Other`
-- Root Directory: repository root
-- Build Command: empty/automatic
-- Output Directory: empty; Vercel serves `public/`
-- Install Command: `npm install`
-
-Deploying the same project keeps the current URL.
-
-## 5. Upload Works from the backend
-
-After deployment, open:
-
-```text
-https://ramshad-portfolio.vercel.app/admin
-```
-
-Enter the same value used for `ADMIN_KEY`. Upload the title, category, accent and image/video. The browser uploads media directly to Supabase Storage; Vercel stores only the API logic.
-
-## Test URLs
-
-```text
-/api/health
-/api/portfolio
-/admin
-```
-
-## Local development
-
-```bash
 npm install
-npx vercel env pull .env.local
-npx vercel dev
+npm run check
 ```
+
+## Storage design
+
+Large media uploads go directly from the browser to Supabase Storage using a short-lived signed upload token. Vercel Functions save only the metadata and database changes.

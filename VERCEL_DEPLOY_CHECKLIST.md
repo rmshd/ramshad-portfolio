@@ -1,12 +1,15 @@
-# Vercel deployment checklist
+# Vercel Pro Admin Upgrade Checklist
 
-- [ ] Add the logo as `public/assets/images/branding/ramshad-portfolio.png`.
-- [ ] Add the profile image as `public/assets/images/profile/profile.png`.
-- [ ] Add all six service icons using their exact original filenames.
-- [ ] Do not add Works images/videos to the Vercel `public` folder.
-- [ ] Run `supabase/setup.sql` once.
-- [ ] Add all five Vercel environment variables.
-- [ ] Push this package to the same GitHub repository used by the current Vercel project.
-- [ ] Confirm `/api/health` returns an OK response.
-- [ ] Open `/admin` and upload portfolio Works.
-- [ ] Confirm the home page automatically displays uploaded Works.
+- [ ] Existing repository was **not emptied**, so real static PNG files remain.
+- [ ] Updated `supabase/setup.sql` was run successfully.
+- [ ] New tables are visible in Supabase Table Editor.
+- [ ] Existing five Vercel environment variables remain configured.
+- [ ] New package files were merged into `mshd/ramshad-portfolio`.
+- [ ] Commit was pushed to `main`.
+- [ ] Latest Vercel deployment is `Ready`.
+- [ ] `/api/health` returns `ok: true`.
+- [ ] `/api/content` returns site settings and content arrays.
+- [ ] `/admin` accepts the current ADMIN_KEY.
+- [ ] Hero text save test works.
+- [ ] Project add/edit/hide/delete works.
+- [ ] Enquiry form saves and appears in admin.

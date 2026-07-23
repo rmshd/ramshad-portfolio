@@ -9,18 +9,14 @@ module.exports = async function handler(req, res) {
     const supabase = getSupabaseAdmin();
     const { data, error } = await supabase
       .from('portfolio_messages')
-      .select('id,name,contact,service,project_type,message,created_at')
+      .select('id,name,contact,service,project_type,message,status,created_at,updated_at')
       .order('created_at', { ascending: false })
       .limit(500);
     if (error) throw error;
     return sendJson(res, 200, (data || []).map(item => ({
-      id: item.id,
-      name: item.name,
-      contact: item.contact,
-      service: item.service,
-      projectType: item.project_type,
-      message: item.message,
-      createdAt: item.created_at
+      id: item.id, name: item.name, contact: item.contact, service: item.service,
+      projectType: item.project_type, message: item.message, status: item.status,
+      createdAt: item.created_at, updatedAt: item.updated_at
     })));
   } catch (error) {
     console.error('admin messages:', error);

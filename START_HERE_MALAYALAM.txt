@@ -1,32 +1,20 @@
-RAMSHAD PORTFOLIO - ആദ്യം ചെയ്യേണ്ടത്
+RAMSHAD PORTFOLIO PRO ADMIN — START HERE
 
-1. ഈ 8 files incoming-media folder-ൽ ഇടുക:
-   ramshad portfolio.png
-   profile.png
-   graphic design.png
-   Motion Graphics.png
-   3d.png
-   AI Visuals.png
-   Video Editing.png
-   Brand Identity.png
+Ithu existing live site-inte upgrade aanu.
 
-2. PowerShell-ൽ project folder തുറന്ന് run ചെയ്യുക:
-   powershell -ExecutionPolicy Bypass -File .\organize-media.ps1
+IMPORTANT:
+Current GitHub repository full delete cheyyaruthu. Athil ningalude original logo, profile photo, 6 service icon PNG files und.
+Puthiya ZIP files existing repository-il COPY + REPLACE/MERGE cheyyanam. Appol existing images remain cheyyum.
 
-3. supabase/setup.sql Supabase SQL Editor-ൽ run ചെയ്യുക.
+Aadyam cheyyendathu:
+1. Supabase Dashboard > SQL Editor open cheyyuka.
+2. Ee package-ilulla supabase/setup.sql full copy cheyyuka.
+3. SQL Editor-il paste cheyth Run cheyyuka.
+4. Success aayal puthiya files current GitHub repo-yil merge cheyyuka.
+5. GitHub Desktop-il Commit + Push cheyyuka.
+6. Vercel Ready aayal /admin open cheyyuka.
 
-4. Vercel Environment Variables ചേർക്കുക:
-   SUPABASE_URL
-   SUPABASE_ANON_KEY
-   SUPABASE_SERVICE_ROLE_KEY
-   SUPABASE_STORAGE_BUCKET = portfolio-media
-   ADMIN_KEY
+Existing Vercel keys maattenda avashyam illa.
 
-5. ഇതേ current Vercel project-ന്റെ GitHub repository-ലേക്ക് files push ചെയ്യുക.
-
-6. Deploy കഴിഞ്ഞ് /admin തുറന്ന് Works images/videos upload ചെയ്യുക.
-
-ശ്രദ്ധിക്കുക:
-- Service icon filenames മാറ്റിയിട്ടില്ല.
-- Works files public folder-ൽ ഇടേണ്ടതില്ല.
-- Works Supabase backend-ലാണ് save ആകുന്നത്.
+Admin URL:
+https://ramshad-portfolio.vercel.app/admin

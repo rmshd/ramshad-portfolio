@@ -1,8 +1,7 @@
-# Media map
+THIS PACKAGE DOES NOT CONTAIN YOUR ORIGINAL PNG IMAGE BYTES.
 
-## Fixed static assets kept in GitHub
+While upgrading, keep the existing files in your GitHub repository:
 
-```text
 public/assets/images/branding/ramshad-portfolio.png
 public/assets/images/profile/profile.png
 public/assets/images/services/graphic design.png
@@ -11,18 +10,5 @@ public/assets/images/services/3d.png
 public/assets/images/services/AI Visuals.png
 public/assets/images/services/Video Editing.png
 public/assets/images/services/Brand Identity.png
-```
 
-## Dynamic Supabase Storage assets
-
-Admin uploads are organized automatically:
-
-```text
-portfolio/images/
-portfolio/videos/
-site/thumbnail/
-site/profile/
-site/service/
-```
-
-The database stores the public URL and Storage path, allowing the admin to replace or delete uploaded media.
+Copy/merge this upgrade over the current repository. Do not empty the repository first.

@@ -22,6 +22,7 @@ gtag('config', 'G-WGKF1KZYNB');
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/dynamic-content.css">
     <style>
         *,
         *::before,
@@ -2913,20 +2914,18 @@ gtag('config', 'G-WGKF1KZYNB');
 
         <div class="hero-inner">
             <div class="hero-copy">
-                <div class="hero-tag ha ha1"><span class="hero-tag-dot"></span>Graphic Designer — Kerala, India</div>
-                <p class="hero-hi ha ha2">Hi, I'm</p>
-                <h1 class="hero-name ha ha3">Ramshad</h1>
+                <div class="hero-tag ha ha1"><span class="hero-tag-dot"></span><span id="heroEyebrowPublic">Graphic Designer — Kerala, India</span></div>
+                <p class="hero-hi ha ha2" id="heroGreetingPublic">Hi, I'm</p>
+                <h1 class="hero-name ha ha3" id="heroNamePublic">Ramshad</h1>
                 <p class="hero-role ha ha4">a <span class="type-text" id="heroTypeText">Graphic Designer</span><span
                         class="type-cursor"></span></p>
-                <p class="hero-desc ha ha5">Self-taught creative designer from Kerala, India — crafting cinematic
-                    digital experiences through 3D, motion graphics, branding & AI visuals. Where faith, technology, and
-                    design converge.</p>
+                <p class="hero-desc ha ha5" id="heroDescriptionPublic">Self-taught creative designer from Kerala, India — crafting cinematic digital experiences through 3D, motion graphics, branding & AI visuals. Where faith, technology, and design converge.</p>
                 <span class="hero-orbit-dot"></span>
                 <div class="hero-btns ha ha6">
                     <a href="#portfolio" class="btn-g">View My Work</a>
                     <a href="#connect" class="btn-b">Get In Touch</a>
                 </div>
-                <div class="hero-socials ha ha6" style="animation-delay:.78s;">
+                <div class="hero-socials ha ha6" id="heroSocials" style="animation-delay:.78s;">
                     <a href="https://www.instagram.com/ramshad_v_/" target="_blank" rel="noopener noreferrer" class="hsoc In" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
                     <a href="https://wa.me/918086754598" target="_blank" rel="noopener noreferrer" class="hsoc Wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
                     <a href="https://www.linkedin.com/in/ramshu-undefined-919a18261" target="_blank" rel="noopener noreferrer" class="hsoc Li" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
@@ -2934,7 +2933,7 @@ gtag('config', 'G-WGKF1KZYNB');
                     <a href="https://t.me/ramshad4598" target="_blank" rel="noopener noreferrer" class="hsoc Tg" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
                     <a href="https://linktr.ee/ramshad_v_" target="_blank" rel="noopener noreferrer" class="hsoc Lt" title="Linktree"><i class="fa-solid fa-tree"></i></a>
                 </div>
-                <div class="hero-mini-grid ha ha6" style="animation-delay:.86s;">
+                <div class="hero-mini-grid ha ha6" id="heroMiniGrid" style="animation-delay:.86s;">
                     <div class="hero-mini-card">
                         <div class="hero-mini-icon"><i class="fa-solid fa-pen-nib"></i></div>
                         <div>
@@ -2964,10 +2963,10 @@ gtag('config', 'G-WGKF1KZYNB');
                     <div class="corner corner-tr"></div>
                     <div class="corner corner-bl"></div>
                     <div class="corner corner-br"></div>
-                    <img src="assets/images/profile/profile.png" alt="Ramshad Profile" class="hero-profile-img">
+                    <img src="assets/images/profile/profile.png" alt="Ramshad Profile" class="hero-profile-img" id="profileImagePublic">
                     <div class="hero-id-card">
-                        <span class="hero-id-name">RAMSHAD V</span>
-                        <span class="hero-id-place">Velluvangad</span>
+                        <span class="hero-id-name" id="profileNamePublic">RAMSHAD V</span>
+                        <span class="hero-id-place" id="profilePlacePublic">Velluvangad</span>
                     </div>
                 </div>
             </div>
@@ -2979,7 +2978,7 @@ gtag('config', 'G-WGKF1KZYNB');
             <div class="s-eye" style="color:var(--g1);">What I Offer</div>
             <h2 class="s-title">What I Do</h2>
             <div class="s-line-tri"></div>
-            <div class="svc-grid">
+            <div class="svc-grid" id="servicesGrid">
 
                 <div class="svc-card g fu">
                     <div class="svc-icon"><img src="/assets/images/services/graphic design.png" alt="Graphic Design"></div>
@@ -3044,18 +3043,12 @@ gtag('config', 'G-WGKF1KZYNB');
             <div class="about-grid">
                 <div class="fu">
                     <div class="s-eye" style="justify-content:flex-start;color:var(--g1);">About Me</div>
-                    <div class="about-big">Designing with <span class="eg">passion</span> —<br />building with <span
-                            class="eb">purpose</span>,<br />guided by <span class="eo">faith</span></div>
-                    <p class="about-body">I'm Ramshad, a 23-year-old Islamic student and self-taught creative designer
-                        from Kerala, India. My passion for design started nearly 5 years ago when I began learning
-                        Blender through YouTube tutorials. Since then, I've explored motion graphics, branding, video
-                        editing, AI-generated visuals, and modern digital experiences.</p>
-                    <p class="about-body">Even without a coding background, I love creating cinematic digital
-                        experiences through pure curiosity and dedication. My goal is to build a meaningful creative
-                        career where faith, technology, and design come together.</p>
+                    <div class="about-big" id="aboutHeadingPublic">Designing with <span class="eg">passion</span> —<br />building with <span class="eb">purpose</span>,<br />guided by <span class="eo">faith</span></div>
+                    <p class="about-body" id="aboutBio1Public">I'm Ramshad, a 23-year-old Islamic student and self-taught creative designer from Kerala, India. My passion for design started nearly 5 years ago when I began learning Blender through YouTube tutorials. Since then, I've explored motion graphics, branding, video editing, AI-generated visuals, and modern digital experiences.</p>
+                    <p class="about-body" id="aboutBio2Public">Even without a coding background, I love creating cinematic digital experiences through pure curiosity and dedication. My goal is to build a meaningful creative career where faith, technology, and design come together.</p>
                 </div>
                 <div class="fu" style="transition-delay:.15s;display:flex;flex-direction:column;gap:1.2rem;">
-                    <div class="astat-row">
+                    <div class="astat-row" id="aboutStatsPublic">
                         <div class="astat g">
                             <div class="astat-n">5+</div>
                             <div class="astat-l">Years of Design</div>
@@ -3071,7 +3064,7 @@ gtag('config', 'G-WGKF1KZYNB');
                     </div>
                     <div class="tools-box">
                         <div class="tools-head">Tools I Use</div>
-                        <div class="tools-tags">
+                        <div class="tools-tags" id="aboutToolsPublic">
                             <span class="tool-tag g">Blender</span>
                             <span class="tool-tag b">After Effects</span>
                             <span class="tool-tag o">Premiere Pro</span>
@@ -3097,7 +3090,7 @@ gtag('config', 'G-WGKF1KZYNB');
                     through practice, experiments and real creative work.</p>
             </div>
 
-            <div class="skills-bento">
+            <div class="skills-bento" id="skillsGrid">
                 <article class="skill-card big skill-float" data-skill-card>
                     <div class="skill-top">
                         <div class="skill-icon"><i class="fa-solid fa-cube"></i></div>
@@ -3179,7 +3172,7 @@ gtag('config', 'G-WGKF1KZYNB');
             </div>
 
             <div class="tools-marquee skill-reveal">
-                <div class="tools-track">
+                <div class="tools-track" id="toolsTrackPublic">
                     <span class="tool-pill"><i class="fa-solid fa-cube"></i>Blender</span>
                     <span class="tool-pill"><i class="fa-solid fa-wand-magic-sparkles"></i>Photoshop</span>
                     <span class="tool-pill"><i class="fa-solid fa-pen-nib"></i>Illustrator</span>
@@ -3211,7 +3204,7 @@ gtag('config', 'G-WGKF1KZYNB');
                     growth.</p>
             </div>
 
-            <div class="edu-timeline">
+            <div class="edu-timeline" id="timelinePublic">
                 <div class="edu-line"><span class="edu-line-fill"></span></div>
 
                 <div class="edu-item">
@@ -3322,10 +3315,9 @@ gtag('config', 'G-WGKF1KZYNB');
             <div class="s-line-tri"></div>
             <div class="connect-grid">
                 <div class="fu">
-                    <div class="conn-head">Find me on social media</div>
-                    <p class="conn-desc">Open to freelance projects, creative collaborations, and conversations. Reach
-                        out through any platform — I'd love to connect!</p>
-                    <div class="soc-list">
+                    <div class="conn-head" id="contactHeadingPublic">Find me on social media</div>
+                    <p class="conn-desc" id="contactDescriptionPublic">Open to freelance projects, creative collaborations, and conversations. Reach out through any platform — I'd love to connect!</p>
+                    <div class="soc-list" id="socialListPublic">
                         <a href="https://www.instagram.com/ramshad_v_/" target="_blank" rel="noopener noreferrer" class="soc-item g">
                             <div class="soc-ico"><i class="fa-brands fa-instagram"></i></div>
                             <div class="soc-info">
@@ -3416,7 +3408,7 @@ gtag('config', 'G-WGKF1KZYNB');
                             <textarea id="waMessage" rows="5" placeholder="Tell me about your project..." required></textarea>
                         </div>
 
-                        <p class="cform-note"><i class="fa-solid fa-shield-halved"></i>Your enquiry is saved securely, then WhatsApp opens for a quick reply.</p>
+                        <p class="cform-note"><i class="fa-solid fa-shield-halved"></i><span id="contactFormNotePublic">Your enquiry is saved securely, then WhatsApp opens for a quick reply.</span></p>
                         <div id="formStatus" class="form-status" role="status" aria-live="polite"></div>
                         <button type="submit" class="cform-btn">Send Message →</button>
                     </form>
@@ -3427,7 +3419,7 @@ gtag('config', 'G-WGKF1KZYNB');
 
     <footer>
         <div class="f-logo">Ram<span class="g">sha</span><span class="b">d</span><span class="o">.</span></div>
-        <div class="f-copy">© 2026 Ramshad. All rights reserved. Kerala, India.</div>
+        <div class="f-copy" id="footerCopyPublic">© 2026 Ramshad. All rights reserved. Kerala, India.</div>
         <div class="f-links">
             <a href="#services">Services</a>
             <a href="#about">About</a>
@@ -3722,7 +3714,8 @@ gtag('config', 'G-WGKF1KZYNB');
             let waiting = true;
 
             function runHeroTypewriter() {
-                const currentRole = heroRoles[roleIndex];
+                const activeHeroRoles = Array.isArray(window.__siteRoles) && window.__siteRoles.length ? window.__siteRoles : heroRoles;
+                const currentRole = activeHeroRoles[roleIndex % activeHeroRoles.length];
 
                 if (waiting) {
                     waiting = false;
@@ -3736,13 +3729,13 @@ gtag('config', 'G-WGKF1KZYNB');
 
                     if (charIndex <= 0) {
                         deleting = false;
-                        roleIndex = (roleIndex + 1) % heroRoles.length;
+                        roleIndex = (roleIndex + 1) % activeHeroRoles.length;
                         setTimeout(runHeroTypewriter, 260);
                     } else {
                         setTimeout(runHeroTypewriter, 38);
                     }
                 } else {
-                    const nextRole = heroRoles[roleIndex];
+                    const nextRole = activeHeroRoles[roleIndex % activeHeroRoles.length];
                     charIndex++;
                     heroTypeText.textContent = nextRole.slice(0, charIndex);
 
@@ -3802,7 +3795,7 @@ gtag('config', 'G-WGKF1KZYNB');
                     showFormStatus('Backend could not save the message. WhatsApp will still open.', 'error');
                 }
 
-                const whatsappNumber = '918086754598';
+                const whatsappNumber = window.__siteContent?.settings?.contact?.whatsappNumber || '918086754598';
                 const whatsappText = `Hi Ramshad,
 
 I am ${payload.name}.
@@ -3853,10 +3846,11 @@ I came from your portfolio website.`;
                     const thumb = document.createElement('div');
                     thumb.className = 'pthumb';
 
-                    const media = document.createElement(type === 'video' ? 'video' : 'img');
+                    const thumbType = item.thumbnailUrl ? 'image' : type;
+                    const media = document.createElement(thumbType === 'video' ? 'video' : 'img');
                     media.className = 'pthumb-media';
-                    media.src = item.src;
-                    if (type === 'video') {
+                    media.src = item.thumbnailUrl || item.src;
+                    if (thumbType === 'video') {
                         media.autoplay = true;
                         media.loop = true;
                         media.muted = true;
@@ -3881,11 +3875,20 @@ I came from your portfolio website.`;
                     const title = document.createElement('div');
                     title.className = 'ptitle';
                     title.textContent = item.title || 'Untitled Project';
+                    const desc = document.createElement('p');
+                    desc.className = 'pdesc';
+                    desc.textContent = item.description || '';
+                    const meta = document.createElement('div');
+                    meta.className = 'pmeta-row';
+                    if (item.featured) { const featured = document.createElement('span'); featured.className='pfeatured'; featured.textContent='★ Featured'; meta.appendChild(featured); }
+                    if (item.externalUrl) { const link=document.createElement('a'); link.className='plink'; link.href=item.externalUrl; link.target='_blank'; link.rel='noopener noreferrer'; link.textContent='Project link ↗'; link.addEventListener('click',event=>event.stopPropagation()); meta.appendChild(link); }
                     info.append(category, title);
+                    if (item.description) info.appendChild(desc);
+                    if (meta.childNodes.length) info.appendChild(meta);
                     thumb.append(media, overlay);
                     card.append(thumb, info);
 
-                    const open = () => openModal(item.src, type);
+                    const open = () => openModal(item.src, type, item);
                     card.addEventListener('click', open);
                     card.addEventListener('keydown', (event) => {
                         if (event.key === 'Enter' || event.key === ' ') {
@@ -3905,7 +3908,7 @@ I came from your portfolio website.`;
         loadPortfolio();
 
         // Modal Logic
-        function openModal(src, type) {
+        function openModal(src, type, item = {}) {
             const modal = document.getElementById('portfolioModal');
             const container = document.getElementById('modalContentContainer');
             container.replaceChildren();
@@ -3925,6 +3928,14 @@ I came from your portfolio website.`;
                 container.innerHTML = '<div class="media-missing">Media file is missing from the project folder.</div>';
             }, { once: true });
             container.appendChild(media);
+            if (item.title || item.description || item.externalUrl) {
+                const details = document.createElement('div');
+                details.className = 'modal-project-info';
+                const heading = document.createElement('h3'); heading.textContent = item.title || 'Project'; details.appendChild(heading);
+                if (item.description) { const description=document.createElement('p'); description.textContent=item.description; details.appendChild(description); }
+                if (item.externalUrl) { const link=document.createElement('a'); link.href=item.externalUrl; link.target='_blank'; link.rel='noopener noreferrer'; link.textContent='Open project link ↗'; details.appendChild(link); }
+                container.appendChild(details);
+            }
 
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -3946,6 +3957,7 @@ I came from your portfolio website.`;
             }
         });
     </script>
+    <script src="/assets/js/site-content.js"></script>
 </body>
 
 </html>

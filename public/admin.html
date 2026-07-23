@@ -1,88 +1,173 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Portfolio Admin</title>
-  <style>
-    :root{color-scheme:dark;--bg:#0a0c0a;--card:#131813;--line:#263026;--text:#eef4ee;--muted:#869586;--green:#39e75f;--blue:#1e90ff;--orange:#ff6b1a}
-    *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--text)}
-    main{width:min(1100px,92%);margin:40px auto}.top{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
-    a{color:var(--green)}.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:20px}
-    h1,h2{margin:0 0 14px}label{display:grid;gap:6px;color:var(--muted);font-size:13px}input,select,button{font:inherit}
-    input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;background:#0d110d;color:var(--text)}
-    button{border:0;border-radius:8px;padding:11px 15px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--green),var(--blue));color:#001000}
-    button.danger{background:#341511;color:#ff9a8b;border:1px solid #6e2a22}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.actions{display:flex;gap:8px;align-items:end}
-    .item{display:grid;grid-template-columns:90px 1fr auto;gap:14px;align-items:center;border-top:1px solid var(--line);padding:12px 0}.item:first-child{border-top:0}.thumb{width:90px;height:62px;object-fit:cover;background:#080a08;border-radius:7px}.muted{color:var(--muted);font-size:13px}.status{min-height:24px;color:var(--green)}
-    @media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.item{grid-template-columns:70px 1fr}.item button{grid-column:2}.thumb{width:70px}}
-    @media(max-width:520px){.grid{grid-template-columns:1fr}}
-  </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Ramshad Portfolio — Pro Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/admin-pro.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body><main>
-  <div class="top"><div><h1>Portfolio Admin</h1><div class="muted">Upload projects and review enquiries.</div></div><a href="/">Open website</a></div>
-  <section class="panel"><h2>Admin access</h2><div class="grid"><label style="grid-column:span 3">Admin key<input id="key" type="password" placeholder="Same value as ADMIN_KEY in Vercel"></label><div class="actions"><button id="connect">Connect</button></div></div><div id="status" class="status"></div></section>
-  <section class="panel"><h2>Add portfolio project</h2><form id="uploadForm" class="grid"><label>Title<input name="title" required></label><label>Category<input name="category" required></label><label>Accent<select name="accent"><option value="g">Green</option><option value="b">Blue</option><option value="o">Orange</option></select></label><label>Image / Video<input name="media" type="file" accept="image/*,video/*" required></label><div class="actions"><button type="submit">Upload project</button></div></form></section>
-  <section class="panel"><h2>Portfolio items</h2><div id="portfolio"></div></section>
-  <section class="panel"><h2>Enquiries</h2><div id="messages"></div></section>
-</main><script>
-const keyInput=document.getElementById('key'),statusBox=document.getElementById('status');
-keyInput.value=sessionStorage.getItem('portfolioAdminKey')||'';
-const headers=()=>({'x-admin-key':keyInput.value});
-function status(text,bad=false){statusBox.textContent=text;statusBox.style.color=bad?'#ff9a8b':'var(--green)'}
-function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-async function api(url,options={}){options.headers={...headers(),...(options.headers||{})};const r=await fetch(url,options);const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data.error||'Request failed');return data}
-async function load(){sessionStorage.setItem('portfolioAdminKey',keyInput.value);status('Connected.');const [items,messages]=await Promise.all([fetch('/api/portfolio').then(async r=>{const d=await r.json();if(!r.ok)throw new Error(d.error||'Portfolio load failed');return d}),api('/api/admin/messages')]);renderPortfolio(items);renderMessages(messages)}
-function renderPortfolio(items){const box=document.getElementById('portfolio');box.innerHTML=items.map(i=>`<div class="item">${i.type==='video'?`<video class="thumb" src="${esc(i.src)}" muted></video>`:`<img class="thumb" src="${esc(i.src)}" alt="">`}<div><strong>${esc(i.title)}</strong><div class="muted">${esc(i.category)} · ${esc(i.type)}</div></div><button class="danger" data-delete-project="${esc(i.id)}">Delete</button></div>`).join('')||'<div class="muted">No projects.</div>'}
-function renderMessages(items){const box=document.getElementById('messages');box.innerHTML=items.map(i=>`<div class="item"><div></div><div><strong>${esc(i.name)} — ${esc(i.service)}</strong><div class="muted">${esc(i.contact||'No contact')} · ${new Date(i.createdAt).toLocaleString()}</div><p>${esc(i.message)}</p></div><button class="danger" data-delete-message="${esc(i.id)}">Delete</button></div>`).join('')||'<div class="muted">No enquiries.</div>'}
-document.getElementById('connect').onclick=()=>load().catch(e=>status(e.message,true));
-document.getElementById('uploadForm').onsubmit=async e=>{
-  e.preventDefault();
-  const form=e.currentTarget;
-  const file=form.elements.media.files[0];
-  if(!file)return status('Choose an image or video.',true);
-  try{
-    status('Preparing secure upload…');
-    const tokenData=await api('/api/admin/upload-token',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({fileName:file.name,mimeType:file.type,fileSize:file.size})
-    });
-    status(`Uploading ${file.name} directly to Supabase…`);
-    const client=window.supabase.createClient(tokenData.supabaseUrl,tokenData.supabaseAnonKey);
-    const {error:uploadError}=await client.storage.from(tokenData.bucket).uploadToSignedUrl(
-      tokenData.path,
-      tokenData.token,
-      file,
-      {contentType:file.type,cacheControl:'3600'}
-    );
-    if(uploadError)throw uploadError;
-    status('Saving project details…');
-    await api('/api/admin/complete-upload',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        title:form.elements.title.value,
-        category:form.elements.category.value,
-        accent:form.elements.accent.value,
-        type:file.type.startsWith('video/')?'video':'image',
-        storagePath:tokenData.path
-      })
-    });
-    form.reset();
-    await load();
-    status('Project uploaded successfully.');
-  }catch(err){status(err.message||'Upload failed.',true)}
-};
-document.addEventListener('click',async e=>{
-  const project=e.target.dataset.deleteProject,message=e.target.dataset.deleteMessage;
-  if(!project&&!message)return;
-  if(!confirm('Delete this item?'))return;
-  try{
-    const url=project?`/api/admin/delete-portfolio?id=${encodeURIComponent(project)}`:`/api/admin/delete-message?id=${encodeURIComponent(message)}`;
-    await api(url,{method:'DELETE'});
-    await load();
-    status('Deleted.');
-  }catch(err){status(err.message,true)}
-});
-if(keyInput.value)load().catch(e=>status(e.message,true));
-</script></body></html>
+<body>
+  <div class="admin-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="/" target="_blank" rel="noopener">
+        <span class="brand-mark">R</span><span><strong>Ramshad</strong><small>Pro Admin</small></span>
+      </a>
+      <nav class="admin-nav" aria-label="Admin sections">
+        <button class="nav-item active" data-tab="dashboard"><i class="fa-solid fa-chart-pie"></i><span>Dashboard</span></button>
+        <button class="nav-item" data-tab="projects"><i class="fa-solid fa-images"></i><span>Projects</span><b id="navProjectCount">0</b></button>
+        <button class="nav-item" data-tab="skills"><i class="fa-solid fa-bolt"></i><span>Skills & Tools</span></button>
+        <button class="nav-item" data-tab="timeline"><i class="fa-solid fa-timeline"></i><span>Life Journey</span></button>
+        <button class="nav-item" data-tab="services"><i class="fa-solid fa-briefcase"></i><span>Services</span></button>
+        <button class="nav-item" data-tab="profile"><i class="fa-solid fa-user-pen"></i><span>Hero & About</span></button>
+        <button class="nav-item" data-tab="contact"><i class="fa-solid fa-share-nodes"></i><span>Contact & Socials</span></button>
+        <button class="nav-item" data-tab="enquiries"><i class="fa-solid fa-inbox"></i><span>Enquiries</span><b id="navNewCount">0</b></button>
+      </nav>
+      <div class="sidebar-foot">
+        <a href="/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open website</a>
+        <button id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Lock admin</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
+        <div><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Manage your entire portfolio without editing code.</p></div>
+        <div class="top-actions"><span class="connection-dot" id="connectionDot"></span><span id="connectionText">Locked</span><button class="ghost" id="refreshBtn"><i class="fa-solid fa-rotate"></i></button></div>
+      </header>
+
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+      <section class="login-panel" id="loginPanel">
+        <div class="login-card">
+          <div class="login-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h2>Admin Access</h2>
+          <p>Enter the same private value saved as <code>ADMIN_KEY</code> in Vercel.</p>
+          <div class="login-row"><input id="adminKey" type="password" autocomplete="current-password" placeholder="Admin key"><button id="connectBtn">Connect</button></div>
+          <div id="loginStatus" class="form-status"></div>
+        </div>
+      </section>
+
+      <div id="adminContent" class="admin-content locked">
+        <section class="tab-page active" id="tab-dashboard">
+          <div class="stats-grid">
+            <article class="stat-card"><span class="stat-icon green"><i class="fa-solid fa-images"></i></span><div><strong id="statProjects">0</strong><small>Total projects</small></div></article>
+            <article class="stat-card"><span class="stat-icon blue"><i class="fa-solid fa-eye"></i></span><div><strong id="statPublished">0</strong><small>Published works</small></div></article>
+            <article class="stat-card"><span class="stat-icon orange"><i class="fa-solid fa-inbox"></i></span><div><strong id="statNewMessages">0</strong><small>New enquiries</small></div></article>
+            <article class="stat-card"><span class="stat-icon green"><i class="fa-solid fa-screwdriver-wrench"></i></span><div><strong id="statSkills">0</strong><small>Skills & tools</small></div></article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="panel"><div class="panel-head"><div><h2>Quick actions</h2><p>Most-used admin actions.</p></div></div><div class="quick-grid">
+              <button data-go="projects" data-focus="projectTitle"><i class="fa-solid fa-plus"></i><span>Add project</span></button>
+              <button data-go="enquiries"><i class="fa-solid fa-envelope-open-text"></i><span>View enquiries</span></button>
+              <button data-go="profile"><i class="fa-solid fa-user-pen"></i><span>Edit profile</span></button>
+              <button data-go="skills"><i class="fa-solid fa-chart-line"></i><span>Update skills</span></button>
+            </div></article>
+            <article class="panel"><div class="panel-head"><div><h2>Content health</h2><p>What is currently active on the website.</p></div></div><div id="healthList" class="health-list"></div></article>
+          </div>
+          <article class="panel"><div class="panel-head"><div><h2>Recent enquiries</h2><p>Latest people who contacted you.</p></div><button class="link-btn" data-go="enquiries">View all</button></div><div id="recentMessages" class="compact-list"></div></article>
+        </section>
+
+        <section class="tab-page" id="tab-projects">
+          <div class="two-col wide-left">
+            <article class="panel sticky-panel"><div class="panel-head"><div><h2 id="projectFormTitle">Add portfolio project</h2><p>Upload an image/video and control how it appears.</p></div><button class="ghost hidden" id="cancelProjectEdit">Cancel edit</button></div>
+              <form id="projectForm" class="form-grid">
+                <input type="hidden" id="projectId">
+                <label class="span-2">Project title<input id="projectTitle" required maxlength="150" placeholder="Example: Ramadan Campaign"></label>
+                <label>Category<select id="projectCategory" required></select></label>
+                <label>Accent<select id="projectAccent"><option value="g">Green</option><option value="b">Blue</option><option value="o">Orange</option></select></label>
+                <label class="span-2">Description<textarea id="projectDescription" rows="4" maxlength="3000" placeholder="Short project story, goal or result"></textarea></label>
+                <label>Project date<input id="projectDate" type="date"></label>
+                <label>External link<input id="projectLink" type="url" placeholder="Behance / Instagram / case study URL"></label>
+                <label>Status<select id="projectStatus"><option value="published">Published</option><option value="draft">Draft</option></select></label>
+                <label>Display order<input id="projectOrder" type="number" min="0" value="10"></label>
+                <label class="check"><input id="projectFeatured" type="checkbox"><span>Featured project</span></label>
+                <label class="check"><input id="projectVisible" type="checkbox" checked><span>Visible on website</span></label>
+                <label class="span-2 file-field">Main image / video<input id="projectMedia" type="file" accept="image/*,video/*"><small>Required for a new project. Optional while editing.</small></label>
+                <label class="span-2 file-field">Optional video thumbnail<input id="projectThumbnail" type="file" accept="image/*"><small>Useful for video cards; leave empty to use the video itself.</small></label>
+                <div id="projectPreview" class="media-preview span-2"></div>
+                <button class="primary span-2" type="submit"><i class="fa-solid fa-cloud-arrow-up"></i><span id="projectSubmitText">Upload project</span></button>
+              </form>
+            </article>
+            <div class="stack">
+              <article class="panel"><div class="panel-head"><div><h2>Project categories</h2><p>These values appear in the category dropdown.</p></div></div>
+                <form id="categoryForm" class="inline-form"><input id="categoryName" placeholder="New category" required><button type="submit">Add</button></form><div id="categoryList" class="chip-list"></div>
+              </article>
+              <article class="panel"><div class="panel-head"><div><h2>Portfolio projects</h2><p>Edit, feature, hide, reorder or delete works.</p></div><div class="filters"><input id="projectSearch" placeholder="Search projects"><select id="projectFilter"><option value="all">All</option><option value="published">Published</option><option value="draft">Draft</option><option value="hidden">Hidden</option><option value="featured">Featured</option></select></div></div><div id="projectList" class="manage-list"></div></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-page" id="tab-skills">
+          <div class="two-col">
+            <article class="panel"><div class="panel-head"><div><h2 id="skillFormTitle">Add / edit skill</h2><p>Update percentages as your expertise grows.</p></div><button id="cancelSkillEdit" class="ghost hidden">Cancel</button></div>
+              <form id="skillForm" class="form-grid"><input type="hidden" id="skillId">
+                <label class="span-2">Skill title<input id="skillTitle" required></label><label>Percentage<input id="skillPercentage" type="number" min="0" max="100" required></label><label>Short label<input id="skillShort" maxlength="8" placeholder="3D"></label>
+                <label class="span-2">Description<textarea id="skillDescription" rows="3"></textarea></label><label>Font Awesome icon<input id="skillIcon" placeholder="fa-solid fa-cube"></label><label>Accent<select id="skillAccent"><option value="g">Green</option><option value="b">Blue</option><option value="o">Orange</option></select></label>
+                <label>Card size<select id="skillSize"><option value="normal">Normal</option><option value="big">Tall / Big</option><option value="wide">Wide</option></select></label><label>Order<input id="skillOrder" type="number" min="0" value="10"></label>
+                <label class="span-2">Skill chips<input id="skillChips" placeholder="3D Modeling, Lighting, Rendering"></label><label class="check span-2"><input id="skillVisible" type="checkbox" checked><span>Visible on website</span></label>
+                <button class="primary span-2" type="submit">Save skill</button></form>
+            </article>
+            <article class="panel"><div class="panel-head"><div><h2>Skills</h2><p>Use arrows to change the website order.</p></div></div><div id="skillList" class="manage-list"></div></article>
+          </div>
+          <div class="two-col">
+            <article class="panel"><div class="panel-head"><div><h2 id="toolFormTitle">Add tool</h2><p>Add Unreal Engine, DaVinci Resolve or any new tool.</p></div><button id="cancelToolEdit" class="ghost hidden">Cancel</button></div>
+              <form id="toolForm" class="form-grid"><input type="hidden" id="toolId"><label class="span-2">Tool name<input id="toolName" required></label><label>Font Awesome icon<input id="toolIcon" placeholder="fa-solid fa-cube"></label><label>Accent<select id="toolAccent"><option value="g">Green</option><option value="b">Blue</option><option value="o">Orange</option></select></label><label>Order<input id="toolOrder" type="number" min="0" value="10"></label><label class="check"><input id="toolVisible" type="checkbox" checked><span>Visible</span></label><button class="primary span-2" type="submit">Save tool</button></form>
+            </article>
+            <article class="panel"><div class="panel-head"><div><h2>Tools I Use</h2><p>Shown in About and the scrolling tools row.</p></div></div><div id="toolList" class="manage-list"></div></article>
+          </div>
+        </section>
+
+        <section class="tab-page" id="tab-timeline">
+          <div class="two-col">
+            <article class="panel sticky-panel"><div class="panel-head"><div><h2 id="timelineFormTitle">Add milestone</h2><p>Add achievements and events to your life journey.</p></div><button id="cancelTimelineEdit" class="ghost hidden">Cancel</button></div>
+              <form id="timelineForm" class="form-grid"><input type="hidden" id="timelineId"><label>Year / period<input id="timelineYear" required placeholder="2027"></label><label>Order<input id="timelineOrder" type="number" min="0" value="10"></label><label class="span-2">Milestone title<input id="timelineTitle" required></label><label class="span-2">Description<textarea id="timelineDescription" rows="5"></textarea></label><label class="check span-2"><input id="timelineVisible" type="checkbox" checked><span>Visible on website</span></label><button class="primary span-2" type="submit">Save milestone</button></form>
+            </article>
+            <article class="panel"><div class="panel-head"><div><h2>Life Journey</h2><p>Current timeline items.</p></div></div><div id="timelineList" class="manage-list"></div></article>
+          </div>
+        </section>
+
+        <section class="tab-page" id="tab-services">
+          <div class="two-col">
+            <article class="panel sticky-panel"><div class="panel-head"><div><h2 id="serviceFormTitle">Add service</h2><p>Add UI/UX or edit your current services.</p></div><button id="cancelServiceEdit" class="ghost hidden">Cancel</button></div>
+              <form id="serviceForm" class="form-grid"><input type="hidden" id="serviceId"><label class="span-2">Service title<input id="serviceTitle" required></label><label class="span-2">Description<textarea id="serviceDescription" rows="5"></textarea></label><label>Icon image path / URL<input id="serviceIconUrl" placeholder="/assets/images/services/...png"></label><label>Font Awesome fallback<input id="serviceIconClass" placeholder="fa-solid fa-pen-nib"></label><label class="span-2 file-field">Upload a new icon image<input id="serviceIconFile" type="file" accept="image/*"></label><label>Accent<select id="serviceAccent"><option value="g">Green</option><option value="b">Blue</option><option value="o">Orange</option></select></label><label>Order<input id="serviceOrder" type="number" min="0" value="10"></label><label class="check span-2"><input id="serviceVisible" type="checkbox" checked><span>Visible on website</span></label><button class="primary span-2" type="submit">Save service</button></form>
+            </article>
+            <article class="panel"><div class="panel-head"><div><h2>What I Offer</h2><p>All service cards on the website.</p></div></div><div id="serviceList" class="manage-list"></div></article>
+          </div>
+        </section>
+
+        <section class="tab-page" id="tab-profile">
+          <form id="settingsForm">
+            <article class="panel"><div class="panel-head"><div><h2>Hero section</h2><p>Update the first screen, profile photo and experience cards.</p></div></div>
+              <div class="form-grid three"><label>Eyebrow<input id="heroEyebrow"></label><label>Greeting<input id="heroGreeting"></label><label>Name<input id="heroName"></label><label class="span-3">Typing roles<input id="heroRoles" placeholder="Graphic Designer, Motion Designer"></label><label class="span-3">Hero description<textarea id="heroDescription" rows="4"></textarea></label><label>Photo name<input id="profileName"></label><label>Photo place<input id="profilePlace"></label><label class="file-field">Profile picture<input id="profileFile" type="file" accept="image/*"></label><div id="profilePreview" class="profile-preview span-3"></div></div>
+              <h3 class="subhead">Three highlight cards</h3><div class="mini-editor" id="miniCardsEditor"></div>
+            </article>
+            <article class="panel"><div class="panel-head"><div><h2>About me</h2><p>Bio, headline and experience statistics.</p></div></div>
+              <div class="form-grid"><label class="span-2">Headline HTML<textarea id="aboutHeading" rows="3"></textarea><small>Existing coloured span tags can remain.</small></label><label class="span-2">Bio paragraph 1<textarea id="aboutBio1" rows="6"></textarea></label><label class="span-2">Bio paragraph 2<textarea id="aboutBio2" rows="6"></textarea></label></div><h3 class="subhead">About statistics</h3><div class="mini-editor" id="aboutStatsEditor"></div>
+            </article>
+            <article class="panel"><div class="form-grid"><label>Navigation CTA<input id="navCta"></label><label>Footer text<input id="footerCopy"></label><button class="primary span-2" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Hero & About</button></div></article>
+          </form>
+        </section>
+
+        <section class="tab-page" id="tab-contact">
+          <div class="two-col">
+            <article class="panel"><div class="panel-head"><div><h2>Contact section</h2><p>WhatsApp and public contact text.</p></div></div><form id="contactSettingsForm" class="form-grid"><label class="span-2">Section heading<input id="contactHeading"></label><label class="span-2">Description<textarea id="contactDescription" rows="5"></textarea></label><label>WhatsApp number<input id="contactWhatsapp" inputmode="numeric" placeholder="918086754598"></label><label>Email<input id="contactEmail" type="email"></label><label class="span-2">Form privacy note<input id="contactFormNote"></label><button class="primary span-2" type="submit">Save contact settings</button></form></article>
+            <article class="panel"><div class="panel-head"><div><h2 id="socialFormTitle">Add social link</h2><p>Instagram, WhatsApp, LinkedIn, Telegram and more.</p></div><button id="cancelSocialEdit" class="ghost hidden">Cancel</button></div><form id="socialForm" class="form-grid"><input id="socialId" type="hidden"><label>Platform<input id="socialPlatform" required></label><label>Handle / label<input id="socialHandle"></label><label class="span-2">Full URL<input id="socialUrl" type="url" required></label><label>Font Awesome icon<input id="socialIcon" placeholder="fa-brands fa-instagram"></label><label>Accent<select id="socialAccent"><option value="g">Green</option><option value="b">Blue</option><option value="o">Orange</option></select></label><label>Order<input id="socialOrder" type="number" min="0" value="10"></label><label class="check"><input id="socialVisible" type="checkbox" checked><span>Visible</span></label><button class="primary span-2" type="submit">Save social link</button></form></article>
+          </div>
+          <article class="panel"><div class="panel-head"><div><h2>Social media links</h2><p>Shown in Hero and Contact sections.</p></div></div><div id="socialList" class="manage-list"></div></article>
+        </section>
+
+        <section class="tab-page" id="tab-enquiries">
+          <article class="panel"><div class="panel-head"><div><h2>Messages & Enquiries</h2><p>All contact form submissions saved in Supabase.</p></div><div class="filters"><input id="messageSearch" placeholder="Search name, service or message"><select id="messageFilter"><option value="all">All</option><option value="new">New</option><option value="read">Read</option><option value="replied">Replied</option></select></div></div><div id="messageList" class="message-list"></div></article>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="/assets/js/admin-pro.js"></script>
+</body>
+</html>

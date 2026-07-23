@@ -1,8 +1,8 @@
 {
-  "name": "ramshad-portfolio-vercel-supabase",
-  "version": "2.0.0",
+  "name": "ramshad-portfolio-pro-admin",
+  "version": "3.0.0",
   "private": true,
-  "description": "Ramshad portfolio prepared for Vercel Functions with Supabase database and Storage.",
+  "description": "Vercel + Supabase portfolio with a complete professional content management dashboard.",
   "scripts": {
     "dev": "npx vercel@latest dev",
     "check": "node scripts/check.js"
